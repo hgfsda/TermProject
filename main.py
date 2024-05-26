@@ -4,17 +4,14 @@ import tkinter.ttk
 from data import *
 
 class main:
-    def __init__(self):
-        self.window = Tk(className="쉼터")
-        self.notebook = tkinter.ttk.Notebook(self.window, width=700, height=500)
-        self.notebook.pack()
-        frame1 = self.frame1()
-        self.notebook.add(frame1, text="메인")
-        frame2 = self.frame2()
-        self.notebook.add(frame2, text="쉼터 정보")
-        frame3 = self.frame3()
-        self.notebook.add(frame3, text="즐겨찾기")
-        self.window.mainloop()
+    def processGmail(self):
+        pass
+
+    def processTelegram(self):
+        pass
+
+    def processBookmark(self):
+        pass
 
     def frame1(self):
         frame1 = Frame(self.window)
@@ -33,6 +30,16 @@ class main:
         b1 = Button(frame1, text='검색', command=lambda:process(NameEntry.get(), ShelterListBox))
         b1.place(x=160, y=90)
 
+        self.gmail = PhotoImage(file="image/Gmail.png")
+        gmailButton = Button(frame1, image=self.gmail, command=self.processGmail)
+        gmailButton.place(x=300,y=120)
+        self.telegram = PhotoImage(file="image/Telegram.png")
+        telegramButton = Button(frame1, image=self.telegram, command=self.processTelegram)
+        telegramButton.place(x=300,y=200)
+        self.bookmarkW = PhotoImage(file="image/Bookmark_w.png")
+        bookmarkButton = Button(frame1, image=self.bookmarkW, command=self.processBookmark)
+        bookmarkButton.place(x=300,y=280)
+
         return frame1
 
     def frame2(self):
@@ -45,6 +52,16 @@ class main:
         Label(frame3, text="즐겨찾기 페이지", font='helvetica 48').pack()
         return frame3
 
-
+    def __init__(self):
+        self.window = Tk(className="쉼터")
+        self.notebook = tkinter.ttk.Notebook(self.window, width=700, height=500)
+        self.notebook.pack()
+        frame1 = self.frame1()
+        self.notebook.add(frame1, text="메인")
+        frame2 = self.frame2()
+        self.notebook.add(frame2, text="쉼터 정보")
+        frame3 = self.frame3()
+        self.notebook.add(frame3, text="즐겨찾기")
+        self.window.mainloop()
 
 main()
