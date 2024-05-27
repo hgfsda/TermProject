@@ -43,8 +43,10 @@ class main:
         return frame1
 
     def frame2(self):
+        elementList = ['사용인원가능수', '면적(m^2)', '선풍기보유현황','에어컨보유현황']
         frame2 = Frame(self.window)
-        Label(frame2, text="쉼터 정보 페이지", font='helvetica 48').pack()
+        el_combo = tkinter.ttk.Combobox(frame2, textvariable='사용인원가능수', values=list(elementList))
+        el_combo.place(x=5, y=10)
         return frame2
 
     def frame3(self):
