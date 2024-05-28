@@ -2,6 +2,8 @@ from tkinter import *
 from tkinter import font
 import tkinter.ttk
 from data import *
+from tkintermapview import TkinterMapView
+
 
 class main:
     def processGmail(self):
@@ -33,6 +35,7 @@ class main:
         b1 = Button(frame1, text='검색', command=lambda:process(NameEntry.get(), ShelterListBox))
         b1.place(x=160, y=90)
 
+        # 기능 버튼
         self.gmail = PhotoImage(file="image/Gmail.png")
         gmailButton = Button(frame1, image=self.gmail, command=self.processGmail)
         gmailButton.place(x=300,y=120)
@@ -45,6 +48,11 @@ class main:
         self.maps = PhotoImage(file="image/googleMaps.png")
         bookmarkButton = Button(frame1, image=self.maps, command=self.processMaps)
         bookmarkButton.place(x=300,y=360)
+
+        # 지도
+        self.map_widget = TkinterMapView(width=400, height=400, corner_radius=0)
+        self.map_widget.place(x=390, y=120)
+        self.map_widget.set_address("Seoul, South Korea")
 
         return frame1
 
@@ -62,7 +70,7 @@ class main:
 
     def __init__(self):
         self.window = Tk(className="쉼터")
-        self.notebook = tkinter.ttk.Notebook(self.window, width=700, height=500)
+        self.notebook = tkinter.ttk.Notebook(self.window, width=800, height=500)
         self.notebook.pack()
         frame1 = self.frame1()
         self.notebook.add(frame1, text="메인")
