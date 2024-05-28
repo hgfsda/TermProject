@@ -13,6 +13,9 @@ class main:
     def processBookmark(self):
         pass
 
+    def processMaps(self):
+        pass
+
     def frame1(self):
         frame1 = Frame(self.window)
         self.notebook.add(frame1, text="메인")
@@ -39,13 +42,16 @@ class main:
         self.bookmarkW = PhotoImage(file="image/Bookmark_w.png")
         bookmarkButton = Button(frame1, image=self.bookmarkW, command=self.processBookmark)
         bookmarkButton.place(x=300,y=280)
+        self.maps = PhotoImage(file="image/googleMaps.png")
+        bookmarkButton = Button(frame1, image=self.maps, command=self.processMaps)
+        bookmarkButton.place(x=300,y=360)
 
         return frame1
 
     def frame2(self):
         elementList = ['사용인원가능수', '면적(m^2)', '선풍기보유현황','에어컨보유현황']
         frame2 = Frame(self.window)
-        el_combo = tkinter.ttk.Combobox(frame2, textvariable='사용인원가능수', values=list(elementList))
+        el_combo = tkinter.ttk.Combobox(frame2, values=list(elementList))
         el_combo.place(x=5, y=10)
         return frame2
 
