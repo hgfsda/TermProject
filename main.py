@@ -16,10 +16,13 @@ class main:
         selected_indices = listbox.curselection()  # 선택된 항목의 인덱스 가져오기
         if selected_indices:
             selected_faclt = listbox.get(selected_indices[0])  # 선택된 항목의 이름 가져오기
-            self.bookmarklist.append(selected_faclt)  # bookmarklist에 추가
-            print(self.bookmarklist)
-        else:
-            print("No item selected")
+            if selected_faclt in self.bookmarklist:
+                self.bookmarklist.remove(selected_faclt)
+                print(self.bookmarklist)
+            else:
+                self.bookmarklist.append(selected_faclt)
+                print(self.bookmarklist)
+
 
     def processMaps(self):
         pass
