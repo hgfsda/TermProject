@@ -29,6 +29,15 @@ class main:
         for faclt in self.bookmarklist:
             self.BookmarkListBox.insert(END, faclt)
 
+    def deleteBookmarks(self):
+        selected_indices = self.BookmarkListBox.curselection()  # 선택된 항목의 인덱스 가져오기
+        if selected_indices:
+            selected_faclt = self.BookmarkListBox.get(selected_indices[0])  # 선택된 항목의 이름 가져오기
+            if selected_faclt in self.bookmarklist:
+                self.bookmarklist.remove(selected_faclt)
+                self.refreshBookmarks()  # 북마크 목록 새로고침
+
+
     def processMaps(self):
         pass
 
@@ -45,7 +54,6 @@ class main:
         ShelterListBox = Listbox(frame1, font=TempFont, activestyle='none',
                                  width=40, height=22, borderwidth=3, relief='ridge')
         ShelterListBox.place(x=10, y=120)
-
         b1 = Button(frame1, text='검색', command=lambda:process(NameEntry.get(), ShelterListBox))
         b1.place(x=160, y=90)
 
@@ -79,10 +87,16 @@ class main:
 
     def frame3(self):
         frame3 = Frame(self.window)
+        title = Label(frame3, text="즐겨찾기", font='helvetica 48')
+        title.place(x=10, y=10)
         TempFont = font.Font(self.window, size=10, family='Consolas')
         self.BookmarkListBox = Listbox(frame3, font=TempFont, activestyle='none',
                                  width=40, height=22, borderwidth=3, relief='ridge')
-        self.BookmarkListBox.place(x=10, y=120)
+        self.BookmarkListBox.place(x=10, y=100)
+        checkB = Button(frame3, text='  검색  ')
+        checkB.place(x=180, y=465)
+        deleteB = Button(frame3, text='  제거  ', command=self.deleteBookmarks)
+        deleteB.place(x=245, y=465)
 
         return frame3
 
