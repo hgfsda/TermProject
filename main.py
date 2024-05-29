@@ -12,30 +12,49 @@ class main:
     def processTelegram(self):
         pass
 
-    def processBookmark(self, listbox):
-        selected_indices = listbox.curselection()  # 선택된 항목의 인덱스 가져오기
-        if selected_indices:
-            selected_faclt = listbox.get(selected_indices[0])  # 선택된 항목의 이름 가져오기
-            if selected_faclt in self.bookmarklist:
-                self.bookmarklist.remove(selected_faclt)
-                print(self.bookmarklist)
-            else:
-                self.bookmarklist.append(selected_faclt)
-                print(self.bookmarklist)
-            self.refreshBookmarks()
-
     def refreshBookmarks(self):
-        self.BookmarkListBox.delete(0, END)  # 기존 항목 모두 삭제
+        self.BookmarkListBox.delete(0, END)
         for faclt in self.bookmarklist:
             self.BookmarkListBox.insert(END, faclt)
 
     def deleteBookmarks(self):
-        selected_indices = self.BookmarkListBox.curselection()  # 선택된 항목의 인덱스 가져오기
+        selected_indices = self.BookmarkListBox.curselection()
         if selected_indices:
-            selected_faclt = self.BookmarkListBox.get(selected_indices[0])  # 선택된 항목의 이름 가져오기
+            selected_faclt = self.BookmarkListBox.get(selected_indices[0])
             if selected_faclt in self.bookmarklist:
                 self.bookmarklist.remove(selected_faclt)
-                self.refreshBookmarks()  # 북마크 목록 새로고침
+                for i, shelter in enumerate(self.shelters_data):
+                    if shelter["faclt"] == selected_faclt:
+                        self.shelters_data.pop(i)
+                        break
+                self.refreshBookmarks()
+
+    def searchBookmark(self):
+        selected_indices = self.BookmarkListBox.curselection()
+        if selected_indices:
+            selected_faclt = self.BookmarkListBox.get(selected_indices[0])
+            for shelter in self.shelters_data:
+                if shelter["faclt"] == selected_faclt:
+                    self.displayData(shelter)
+                    break
+        else:
+            print("No item selected")
+
+    def displayData(self, shelter):
+        self.infoLabel.config(text=f"시설명: {shelter['faclt']}\n"
+                                   f"시설유형: {shelter['typediv']}\n"
+                                   f"면적(m^2): {shelter['area']}\n"
+                                   f"이용가능인원수: {shelter['pncnt']}\n"
+                                   f"선풍기보유현황: {shelter['elefancnt']}\n"
+                                   f"에어컨보유현황: {shelter['arcndtncnt']}\n"
+                                   f"야간개방: {shelter['night']}\n"
+                                   f"휴일개방: {shelter['wkend']}\n"
+                                   f"숙박가능여부: {shelter['syayng']}\n"
+                                   f"특이사항: {shelter['partclr']}\n"
+                                   f"관리기관전화번호: {shelter['telno']}\n"
+                                   f"소재지도로명주소: {shelter['Lmna']}\n"
+                                   f"소재지지번주소: {shelter['Lna']}\n"
+                                   f"우편번호: {shelter['ZipCode']}")
 
 
     def processMaps(self):
@@ -65,7 +84,9 @@ class main:
         telegramButton = Button(frame1, image=self.telegram, command=self.processTelegram)
         telegramButton.place(x=300,y=200)
         self.bookmark = PhotoImage(file="image/Bookmark.png")
-        bookmarkButton = Button(frame1, image=self.bookmark, command=lambda: self.processBookmark(ShelterListBox))
+        bookmarkButton = Button(frame1, image=self.bookmark,
+                                command=lambda:processBookmark(NameEntry.get(), ShelterListBox,
+                                                               self.BookmarkListBox, self.shelters_data, self.bookmarklist))
         bookmarkButton.place(x=300,y=280)
         self.maps = PhotoImage(file="image/googleMaps.png")
         bookmarkButton = Button(frame1, image=self.maps, command=self.processMaps)
@@ -93,11 +114,12 @@ class main:
         self.BookmarkListBox = Listbox(frame3, font=TempFont, activestyle='none',
                                  width=40, height=22, borderwidth=3, relief='ridge')
         self.BookmarkListBox.place(x=10, y=100)
-        checkB = Button(frame3, text='  검색  ')
+        checkB = Button(frame3, text='  검색  ', command=self.searchBookmark)
         checkB.place(x=180, y=465)
         deleteB = Button(frame3, text='  제거  ', command=self.deleteBookmarks)
         deleteB.place(x=245, y=465)
-
+        self.infoLabel = Label(frame3, bg='white',borderwidth=12,font=TempFont, justify=LEFT)
+        self.infoLabel.place(x=310, y=100)
         return frame3
 
     def __init__(self):
@@ -112,6 +134,7 @@ class main:
         self.notebook.add(frame3, text="즐겨찾기")
 
         self.bookmarklist = []
+        self.shelters_data = []
 
         self.window.mainloop()
 
