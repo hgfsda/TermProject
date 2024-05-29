@@ -7,7 +7,7 @@ from tkintermapview import TkinterMapView
 
 class main:
     def processGmail(self):
-        pass
+        print(self.elementData)
 
     def processTelegram(self):
         pass
@@ -23,9 +23,9 @@ class main:
             selected_faclt = self.BookmarkListBox.get(selected_indices[0])
             if selected_faclt in self.bookmarklist:
                 self.bookmarklist.remove(selected_faclt)
-                for i, shelter in enumerate(self.shelters_data):
+                for i, shelter in enumerate(self.sheltersData):
                     if shelter["faclt"] == selected_faclt:
-                        self.shelters_data.pop(i)
+                        self.sheltersData.pop(i)
                         break
                 self.refreshBookmarks()
 
@@ -33,7 +33,7 @@ class main:
         selected_indices = self.BookmarkListBox.curselection()
         if selected_indices:
             selected_faclt = self.BookmarkListBox.get(selected_indices[0])
-            for shelter in self.shelters_data:
+            for shelter in self.sheltersData:
                 if shelter["faclt"] == selected_faclt:
                     self.displayData(shelter)
                     break
@@ -54,6 +54,23 @@ class main:
                                    f"소재지지번주소: {shelter['Lna']}\n"
                                    f"우편번호: {shelter['ZipCode']}")
 
+    def on_combobox_select(self, event):
+        selected_index = self.el_combo.current()  # Combobox에서 선택된 인덱스를 가져옵니다.
+        self.graph_canvas.delete('all')
+        name = self.elementData[0]
+        data = self.elementData[selected_index+1]
+        max_doctor_count = int(max(data))
+        bar_width = 20
+        x_gap = 10
+        x0 = 60
+        y0 = 250
+        for i in range(len(name)):
+            x1 = x0 + i * (bar_width + x_gap)
+            y1 = y0 - 200 * float(data[i]) / max_doctor_count
+            self.graph_canvas.create_rectangle(x1, y1, x1 + bar_width, y0, fill='blue')
+            self.graph_canvas.create_text(x1 + bar_width / 2, y0 + 100, text=name[i], anchor='n', angle=90)
+            self.graph_canvas.create_text(x1 + bar_width / 2, y1 - 10, text=data[i], anchor='s')
+
     def frame1(self):
         frame1 = Frame(self.window)
         self.notebook.add(frame1, text="메인")
@@ -67,7 +84,7 @@ class main:
         ShelterListBox = Listbox(frame1, font=TempFont, activestyle='none',
                                  width=40, height=22, borderwidth=3, relief='ridge')
         ShelterListBox.place(x=10, y=120)
-        b1 = Button(frame1, text='검색', command=lambda:process(NameEntry.get(), ShelterListBox))
+        b1 = Button(frame1, text='검색', command=lambda:process(NameEntry.get(), ShelterListBox, self.elementData))
         b1.place(x=160, y=90)
 
         # 기능 버튼
@@ -80,7 +97,7 @@ class main:
         self.bookmark = PhotoImage(file="image/Bookmark.png")
         bookmarkButton = Button(frame1, image=self.bookmark,
                                 command=lambda:processBookmark(NameEntry.get(), ShelterListBox,
-                                                               self.BookmarkListBox, self.shelters_data, self.bookmarklist))
+                                                               self.BookmarkListBox, self.sheltersData, self.bookmarklist))
         bookmarkButton.place(x=300,y=280)
         self.maps = PhotoImage(file="image/googleMaps.png")
         bookmarkButton = Button(frame1, image=self.maps, command=lambda:processMaps(NameEntry.get(),ShelterListBox,
@@ -97,8 +114,13 @@ class main:
     def frame2(self):
         elementList = ['사용인원가능수', '면적(m^2)', '선풍기보유현황','에어컨보유현황']
         frame2 = Frame(self.window)
-        el_combo = tkinter.ttk.Combobox(frame2, values=list(elementList))
-        el_combo.place(x=5, y=10)
+        self.el_combo = tkinter.ttk.Combobox(frame2, values=list(elementList))
+        self.el_combo.place(x=5, y=10)
+        self.el_combo.bind("<<ComboboxSelected>>", self.on_combobox_select)
+
+        self.graph_canvas = Canvas(frame2, width=800, height=400)
+        self.graph_canvas.place(x=5, y=50)
+
         return frame2
 
     def frame3(self):
@@ -129,7 +151,8 @@ class main:
         self.notebook.add(frame3, text="즐겨찾기")
 
         self.bookmarklist = []
-        self.shelters_data = []
+        self.sheltersData = []
+        self.elementData = [[] for _ in range(5)]
 
         self.window.mainloop()
 
