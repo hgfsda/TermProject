@@ -17,6 +17,9 @@ def process(str, listbox, elementData):
         listbox.insert(row_count, faclt)
         row_count += 1
 
+    for i in range(len(elementData)):
+        elementData[i] = []
+
     for i, item in enumerate(root.iter("row")):
         if i >= 20:
             break
