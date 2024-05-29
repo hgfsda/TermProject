@@ -37,8 +37,6 @@ class main:
                 if shelter["faclt"] == selected_faclt:
                     self.displayData(shelter)
                     break
-        else:
-            print("No item selected")
 
     def displayData(self, shelter):
         self.infoLabel.config(text=f"시설명: {shelter['faclt']}\n"
@@ -55,10 +53,6 @@ class main:
                                    f"소재지도로명주소: {shelter['Lmna']}\n"
                                    f"소재지지번주소: {shelter['Lna']}\n"
                                    f"우편번호: {shelter['ZipCode']}")
-
-
-    def processMaps(self):
-        pass
 
     def frame1(self):
         frame1 = Frame(self.window)
@@ -89,7 +83,8 @@ class main:
                                                                self.BookmarkListBox, self.shelters_data, self.bookmarklist))
         bookmarkButton.place(x=300,y=280)
         self.maps = PhotoImage(file="image/googleMaps.png")
-        bookmarkButton = Button(frame1, image=self.maps, command=self.processMaps)
+        bookmarkButton = Button(frame1, image=self.maps, command=lambda:processMaps(NameEntry.get(),ShelterListBox,
+                                                                                    self.map_widget))
         bookmarkButton.place(x=300,y=360)
 
         # 지도
@@ -118,7 +113,7 @@ class main:
         checkB.place(x=180, y=465)
         deleteB = Button(frame3, text='  제거  ', command=self.deleteBookmarks)
         deleteB.place(x=245, y=465)
-        self.infoLabel = Label(frame3, bg='white',borderwidth=12,font=TempFont, justify=LEFT)
+        self.infoLabel = Label(frame3, bg='white',borderwidth=4,font=TempFont, justify=LEFT)
         self.infoLabel.place(x=310, y=100)
         return frame3
 
