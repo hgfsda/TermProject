@@ -12,8 +12,14 @@ class main:
     def processTelegram(self):
         pass
 
-    def processBookmark(self):
-        pass
+    def processBookmark(self, listbox):
+        selected_indices = listbox.curselection()  # 선택된 항목의 인덱스 가져오기
+        if selected_indices:
+            selected_faclt = listbox.get(selected_indices[0])  # 선택된 항목의 이름 가져오기
+            self.bookmarklist.append(selected_faclt)  # bookmarklist에 추가
+            print(self.bookmarklist)
+        else:
+            print("No item selected")
 
     def processMaps(self):
         pass
@@ -42,8 +48,8 @@ class main:
         self.telegram = PhotoImage(file="image/Telegram.png")
         telegramButton = Button(frame1, image=self.telegram, command=self.processTelegram)
         telegramButton.place(x=300,y=200)
-        self.bookmarkW = PhotoImage(file="image/Bookmark_w.png")
-        bookmarkButton = Button(frame1, image=self.bookmarkW, command=self.processBookmark)
+        self.bookmark = PhotoImage(file="image/Bookmark.png")
+        bookmarkButton = Button(frame1, image=self.bookmark, command=lambda: self.processBookmark(ShelterListBox))
         bookmarkButton.place(x=300,y=280)
         self.maps = PhotoImage(file="image/googleMaps.png")
         bookmarkButton = Button(frame1, image=self.maps, command=self.processMaps)
@@ -78,6 +84,9 @@ class main:
         self.notebook.add(frame2, text="쉼터 정보")
         frame3 = self.frame3()
         self.notebook.add(frame3, text="즐겨찾기")
+
+        self.bookmarklist = []
+
         self.window.mainloop()
 
 main()
