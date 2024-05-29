@@ -66,10 +66,14 @@ class main:
         y0 = 250
         for i in range(len(name)):
             x1 = x0 + i * (bar_width + x_gap)
-            y1 = y0 - 200 * float(data[i]) / max_doctor_count
-            self.graph_canvas.create_rectangle(x1, y1, x1 + bar_width, y0, fill='blue')
+            if selected_index+1 == 1 or selected_index+1 == 2:
+                y1 = y0 - 5 * float(data[i]) / max_doctor_count
+            else:
+                y1 = y0 - 100 * float(data[i]) / max_doctor_count
+
+            self.graph_canvas.create_rectangle(x1, max(y1, 40), x1 + bar_width, y0, fill='blue')
             self.graph_canvas.create_text(x1 + bar_width / 2, y0 + 100, text=name[i], anchor='n', angle=90)
-            self.graph_canvas.create_text(x1 + bar_width / 2, y1 - 10, text=data[i], anchor='s')
+            self.graph_canvas.create_text(x1 + bar_width / 2, max(y1, 40) - 10, text=data[i], anchor='s')
 
     def frame1(self):
         frame1 = Frame(self.window)
@@ -118,7 +122,7 @@ class main:
         self.el_combo.place(x=5, y=10)
         self.el_combo.bind("<<ComboboxSelected>>", self.on_combobox_select)
 
-        self.graph_canvas = Canvas(frame2, width=800, height=400)
+        self.graph_canvas = Canvas(frame2, width=800, height=450)
         self.graph_canvas.place(x=5, y=50)
 
         return frame2
