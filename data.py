@@ -4,7 +4,7 @@ from tkinter import *
 
 url = 'https://openapi.gg.go.kr/Heatwaverestarere?KEY=47bd6dc9f9724cc787a3164da514a319&pIndex=1&pSize=1000'
 
-def process(str, listbox):
+def process(str, listbox, elementData):
     queryParams= {'SIGUN_NM': str}
 
     response = requests.get(url, params=queryParams)
@@ -16,6 +16,15 @@ def process(str, listbox):
         faclt = item.findtext("RESTARER_FACLT_NM")   # 쉼터명
         listbox.insert(row_count, faclt)
         row_count += 1
+
+    for i, item in enumerate(root.iter("row")):
+        if i >= 20:
+            break
+        elementData[0].append(item.findtext("RESTARER_FACLT_NM"))  # 쉼터명
+        elementData[1].append(item.findtext("UTLZ_POSBL_PSNNUM_CNT"))  # 이용가능인원수
+        elementData[2].append(item.findtext("FACLT_AR"))  # 면적 (m^2)
+        elementData[3].append(item.findtext("ELEFAN_HOLD_CNT"))  # 선풍기보유현황
+        elementData[4].append(item.findtext("ARCNDTN_HOLD_CNT"))  # 에어컨보유현황
 
 def processBookmark(str, listbox, Bookmarklistbox, shelters_data, bookmarklist):
     queryParams= {'SIGUN_NM': str}
@@ -78,7 +87,7 @@ def processMaps(str, listbox, map_widget):
     for item in root.iter("row"):
         if item.findtext("RESTARER_FACLT_NM") == selected_faclt:
             ZipCode = item.findtext("REFINE_ZIP_CD")  # 쉼터명
-
+            map_widget.delete_all_marker()
             address = ZipCode + ", 대한민국"
             map_widget.set_address(address, marker=True)
 
