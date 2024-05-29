@@ -22,7 +22,12 @@ class main:
             else:
                 self.bookmarklist.append(selected_faclt)
                 print(self.bookmarklist)
+            self.refreshBookmarks()
 
+    def refreshBookmarks(self):
+        self.BookmarkListBox.delete(0, END)  # 기존 항목 모두 삭제
+        for faclt in self.bookmarklist:
+            self.BookmarkListBox.insert(END, faclt)
 
     def processMaps(self):
         pass
@@ -74,7 +79,11 @@ class main:
 
     def frame3(self):
         frame3 = Frame(self.window)
-        Label(frame3, text="즐겨찾기 페이지", font='helvetica 48').pack()
+        TempFont = font.Font(self.window, size=10, family='Consolas')
+        self.BookmarkListBox = Listbox(frame3, font=TempFont, activestyle='none',
+                                 width=40, height=22, borderwidth=3, relief='ridge')
+        self.BookmarkListBox.place(x=10, y=120)
+
         return frame3
 
     def __init__(self):
