@@ -100,6 +100,10 @@ def processMaps(str, listbox, map_widget):
 def processGmail():
     window = Tk(className="받을 메일 입력")
     window.geometry("250x70")
+    recipientEntry = Entry(window, width=230)
+    recipientEntry.place(x=0, y=10)
+    recipientButton = Button(window, text="    전송    ")
+    recipientButton.place(x=90, y=36)
     window.mainloop()
     # host = "smtp.gmail.com"
     # port = "587"
