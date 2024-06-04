@@ -97,3 +97,33 @@ def processMaps(str, listbox, map_widget):
             break
 
 
+def processGmail():
+    host = "smtp.gmail.com"
+    port = "587"
+    title = "쉼터 정보"
+    senderAddr = "jtyk119@tukorea.ac.kr"
+    recipientAddr = "jtyk119@naver.com"
+    passwd = "wwzgbronrxdcrnfs"
+
+    import smtplib
+    from email.mime.multipart import MIMEMultipart
+    from email.mime.text import MIMEText
+
+    msg = MIMEMultipart('alternative')
+    msg['Subject'] = title
+    msg['From'] = senderAddr
+    msg['To'] = recipientAddr
+
+    msgtext = "쉼터 정보입니다."
+    msgPart = MIMEText(msgtext, 'plain')
+    msg.attach(msgPart)
+
+    s = smtplib.SMTP(host, port)
+    s.ehlo()
+    s.starttls()
+    s.ehlo()
+    s.login(senderAddr, passwd)
+    s.sendmail(senderAddr, [recipientAddr], msg.as_string())
+    s.close()
+
+

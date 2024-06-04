@@ -6,9 +6,6 @@ from tkintermapview import TkinterMapView
 
 
 class main:
-    def processGmail(self):
-        print(self.elementData)
-
     def processTelegram(self):
         pass
 
@@ -93,7 +90,7 @@ class main:
 
         # 기능 버튼
         self.gmail = PhotoImage(file="image/Gmail.png")
-        gmailButton = Button(frame1, image=self.gmail, command=self.processGmail)
+        gmailButton = Button(frame1, image=self.gmail, command=lambda:processGmail())
         gmailButton.place(x=300,y=120)
         self.telegram = PhotoImage(file="image/Telegram.png")
         telegramButton = Button(frame1, image=self.telegram, command=self.processTelegram)
