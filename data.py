@@ -136,3 +136,14 @@ def mailsend(recipientEntry):
     s.sendmail(senderAddr, [recipientAddr], msg.as_string())
     s.close()
 
+    def close_window():
+        mail_window.destroy()
+
+    mail_window = Tk(className="메일 전송")
+    mail_window.geometry("240x100")
+    l = Label(mail_window, text='메일을 전송하였습니다.')
+    l.pack(pady=10)
+    b = Button(mail_window, text='   확인   ', command=close_window)
+    b.pack(pady=10)
+    mail_window.mainloop()
+
