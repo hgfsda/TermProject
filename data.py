@@ -1,6 +1,7 @@
 import requests
 import xml.etree.ElementTree as ET
 from tkinter import *
+import spam
 
 url = 'https://openapi.gg.go.kr/Heatwaverestarere?KEY=47bd6dc9f9724cc787a3164da514a319&pIndex=1&pSize=1000'
 
@@ -142,7 +143,7 @@ def mailsend(recipientEntry, shelters_data):
     port = "587"
     title = "쉼터 정보"
     senderAddr = "jtyk119@tukorea.ac.kr"
-    passwd = "wwzgbronrxdcrnfs"
+    passwd = spam.getpw()
     recipientAddr = str(recipientEntry.get())
 
     import smtplib

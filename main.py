@@ -36,20 +36,20 @@ class main:
                     break
 
     def displayData(self, shelter):
-        self.infoLabel.config(text=f"시설명: {shelter['faclt']}\n"
-                                   f"시설유형: {shelter['typediv']}\n"
-                                   f"면적(m^2): {shelter['area']}\n"
-                                   f"이용가능인원수: {shelter['pncnt']}\n"
-                                   f"선풍기보유현황: {shelter['elefancnt']}\n"
-                                   f"에어컨보유현황: {shelter['arcndtncnt']}\n"
-                                   f"야간개방: {shelter['night']}\n"
-                                   f"휴일개방: {shelter['wkend']}\n"
-                                   f"숙박가능여부: {shelter['syayng']}\n"
-                                   f"특이사항: {shelter['partclr']}\n"
-                                   f"관리기관전화번호: {shelter['telno']}\n"
-                                   f"소재지도로명주소: {shelter['Lmna']}\n"
-                                   f"소재지지번주소: {shelter['Lna']}\n"
-                                   f"우편번호: {shelter['ZipCode']}")
+        self.infoLabel.config(text=f"시설명 : {shelter['faclt']}\n"
+                                   f"시설유형 : {shelter['typediv']}\n"
+                                   f"면적(m²) : {shelter['area']}\n"
+                                   f"이용가능인원수 : {shelter['pncnt']}\n"
+                                   f"선풍기보유현황 : {shelter['elefancnt']}\n"
+                                   f"에어컨보유현황 : {shelter['arcndtncnt']}\n"
+                                   f"야간개방 : {shelter['night']}\n"
+                                   f"휴일개방 : {shelter['wkend']}\n"
+                                   f"숙박가능여부 : {shelter['syayng']}\n"
+                                   f"특이사항 : {shelter['partclr']}\n"
+                                   f"관리기관전화번호 : {shelter['telno']}\n"
+                                   f"소재지도로명주소 : {shelter['Lmna']}\n"
+                                   f"소재지지번주소 : {shelter['Lna']}\n"
+                                   f"우편번호 : {shelter['ZipCode']}")
 
     def on_combobox_select(self, event):
         selected_index = self.el_combo.current()  # Combobox에서 선택된 인덱스를 가져옵니다.
@@ -90,7 +90,7 @@ class main:
 
         # 기능 버튼
         self.gmail = PhotoImage(file="image/Gmail.png")
-        gmailButton = Button(frame1, image=self.gmail, command=lambda:processGmail())
+        gmailButton = Button(frame1, image=self.gmail, command=lambda:processGmail(NameEntry.get(), ShelterListBox))
         gmailButton.place(x=300,y=120)
         self.telegram = PhotoImage(file="image/Telegram.png")
         telegramButton = Button(frame1, image=self.telegram, command=self.processTelegram)
@@ -113,7 +113,7 @@ class main:
         return frame1
 
     def frame2(self):
-        elementList = ['사용인원가능수', '면적(m^2)', '선풍기보유현황','에어컨보유현황']
+        elementList = ['사용인원가능수', '면적(m²)', '선풍기보유현황','에어컨보유현황']
         frame2 = Frame(self.window)
         self.el_combo = tkinter.ttk.Combobox(frame2, values=list(elementList))
         self.el_combo.place(x=5, y=10)
