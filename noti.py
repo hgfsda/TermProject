@@ -21,20 +21,21 @@ bot = telepot.Bot(TOKEN)
 def getData(loc_param):
     res_list = []
     encoded_loc_param = quote(loc_param)
-    url = baseurl+'&SIGUN_NM='+encoded_loc_param
+    url = baseurl + '&SIGUN_NM=' + encoded_loc_param
     res_body = urlopen(url).read()
     soup = BeautifulSoup(res_body, 'html.parser')
     items = soup.findAll('row')
     for item in items:
-        item = re.sub('<.*?>', '|', item.text)
-        parsed = item.split('|')
-        try:
-            row = parsed[6]+', '+parsed[14]+'\n'
-        except IndexError:
-            row = item.replace('|', ',')
+        shelter_info = {}
+        shelter_info['RESTARER_FACLT_NM'] = item.find('restarer_faclt_nm').text
+        shelter_info['RESTARER_TYPE_DIV_NM'] = item.find('restarer_type_div_nm').text
+        shelter_info['REFINE_ROADNM_ADDR'] = item.find('refine_roadnm_addr').text
+        shelter_info['REFINE_ZIP_CD'] = item.find('refine_zip_cd').text
 
-        if row:
-            res_list.append(row.strip())
+        # 조합된 문자열 생성
+        formatted_info = f"{shelter_info['RESTARER_FACLT_NM']}, {shelter_info['RESTARER_TYPE_DIV_NM']}, {shelter_info['REFINE_ROADNM_ADDR']}, {shelter_info['REFINE_ZIP_CD']}"
+
+        res_list.append(formatted_info)
     return res_list
 
 def sendMessage(user, msg):
@@ -43,7 +44,7 @@ def sendMessage(user, msg):
     except:
         traceback.print_exc(file=sys.stdout)
 
-def run(date_param, param='11710'):
+def run(date_param):
     conn = sqlite3.connect('logs.db')
     cursor = conn.cursor()
     cursor.execute('CREATE TABLE IF NOT EXISTS logs( user TEXT, log TEXT, PRIMARY KEY(user, log) )')
@@ -56,31 +57,30 @@ def run(date_param, param='11710'):
     for data in user_cursor.fetchall():
         user, param = data[0], data[1]
         print(user, date_param, param)
-        res_list = getData( param, date_param )
+        res_list = getData(param)
         msg = ''
         for r in res_list:
             try:
-                cursor.execute('INSERT INTO logs (user,log) VALUES ("%s", "%s")'%(user,r))
+                cursor.execute('INSERT INTO logs (user, log) VALUES (?, ?)', (user, r))
             except sqlite3.IntegrityError:
-                # 이미 해당 데이터가 있다는 것을 의미합니다.
                 pass
             else:
-                print( str(datetime.now()).split('.')[0], r )
-                if len(r+msg)+1>MAX_MSG_LENGTH:
-                    sendMessage( user, msg )
-                    msg = r+'\n'
+                print(str(datetime.now()).split('.')[0], r)
+                if len(r + msg) + 1 > MAX_MSG_LENGTH:
+                    sendMessage(user, msg)
+                    msg = r + '\n'
                 else:
-                    msg += r+'\n'
+                    msg += r + '\n'
         if msg:
-            sendMessage( user, msg )
+            sendMessage(user, msg)
     conn.commit()
 
-if __name__=='__main__':
+if __name__ == '__main__':
     today = date.today()
     current_month = today.strftime('%Y%m')
 
-    print( '[',today,']received token :', TOKEN )
+    print('[', today, ']received token :', TOKEN)
 
-    pprint( bot.getMe() )
+    pprint(bot.getMe())
 
     run(current_month)
