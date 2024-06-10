@@ -64,23 +64,19 @@ def handle(msg):
     args = text.split(' ')
 
     if text.startswith('지역') and len(args)>1:
-        print('try to 지역', args[1])
         replyAptData( chat_id, args[1] )
+    elif text.startswith('즐겨찾기'):
+        pass
     else:
         noti.sendMessage(chat_id, "모르는 명령어입니다.\n다음과 같은 명령어를 입력해주십시오. \n1. 지역 [지역이름] \n2. 즐겨찾기")
 
+def teller():
+    today = date.today()
+    current_month = today.strftime('%Y%m')
 
-today = date.today()
-current_month = today.strftime('%Y%m')
+    print( '[',today,']received token :', noti.TOKEN )
 
-print( '[',today,']received token :', noti.TOKEN )
+    bot = telepot.Bot(noti.TOKEN)
+    pprint( bot.getMe() )
 
-bot = telepot.Bot(noti.TOKEN)
-pprint( bot.getMe() )
-
-bot.message_loop(handle)
-
-print('Listening...')
-
-while 1:
-  time.sleep(5)
+    bot.message_loop(handle)

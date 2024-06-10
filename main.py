@@ -3,11 +3,12 @@ from tkinter import font
 import tkinter.ttk
 from data import *
 from tkintermapview import TkinterMapView
+import teller
 
 
 class main:
     def processTelegram(self):
-        pass
+        teller.teller()
 
     def refreshBookmarks(self):
         self.BookmarkListBox.delete(0, END)
