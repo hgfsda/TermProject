@@ -8,7 +8,7 @@ import teller
 
 class main:
     def processTelegram(self):
-        teller.teller()
+        teller.teller(self.sheltersData)
 
     def refreshBookmarks(self):
         self.BookmarkListBox.delete(0, END)

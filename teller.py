@@ -44,17 +44,29 @@ def save( user, loc_param ):
         noti.sendMessage( user, '저장되었습니다.' )
         conn.commit()
 
-def check( user ):
-    conn = sqlite3.connect('users.db')
-    cursor = conn.cursor()
-    cursor.execute('CREATE TABLE IF NOT EXISTS users( user TEXT, location TEXT, PRIMARY KEY(user, location) )')
-    cursor.execute('SELECT * from users WHERE user="%s"' % user)
-    for data in cursor.fetchall():
-        row = 'id:' + str(data[0]) + ', location:' + data[1]
-        noti.sendMessage( user, row )
+def check(user, bookmarklist):
+    if bookmarklist:
+        for shelter in bookmarklist:
+            msg = (f"시설명 : {shelter['faclt']}\n"
+                   f"시설유형 : {shelter['typediv']}\n"
+                   f"면적(m²) : {shelter['area']}\n"
+                   f"이용가능인원수 : {shelter['pncnt']}\n"
+                   f"선풍기보유현황 : {shelter['elefancnt']}\n"
+                   f"에어컨보유현황 : {shelter['arcndtncnt']}\n"
+                   f"야간개방 : {shelter['night']}\n"
+                   f"휴일개방 : {shelter['wkend']}\n"
+                   f"숙박가능여부 : {shelter['syayng']}\n"
+                   f"특이사항 : {shelter['partclr']}\n"
+                   f"관리기관전화번호 : {shelter['telno']}\n"
+                   f"소재지도로명주소 : {shelter['Lmna']}\n"
+                   f"소재지지번주소 : {shelter['Lna']}\n"
+                   f"우편번호 : {shelter['ZipCode']}\n\n")
+            noti.sendMessage(user, msg)
+    else:
+        noti.sendMessage(user, "즐겨찾기 된 쉼터가 없습니다.")
 
 
-def handle(msg):
+def handle(msg, bookmarklist):
     content_type, chat_type, chat_id = telepot.glance(msg)
     if content_type != 'text':
         noti.sendMessage(chat_id, '난 텍스트 이외의 메시지는 처리하지 못해요.')
@@ -63,20 +75,20 @@ def handle(msg):
     text = msg['text']
     args = text.split(' ')
 
-    if text.startswith('지역') and len(args)>1:
-        replyAptData( chat_id, args[1] )
+    if text.startswith('지역') and len(args) > 1:
+        replyAptData(chat_id, args[1])
     elif text.startswith('즐겨찾기'):
-        pass
+        check(chat_id, bookmarklist)
     else:
         noti.sendMessage(chat_id, "모르는 명령어입니다.\n다음과 같은 명령어를 입력해주십시오. \n1. 지역 [지역이름] \n2. 즐겨찾기")
 
-def teller():
+def teller(bookmarklist):
     today = date.today()
     current_month = today.strftime('%Y%m')
 
-    print( '[',today,']received token :', noti.TOKEN )
+    print('[', today, ']received token :', noti.TOKEN)
 
     bot = telepot.Bot(noti.TOKEN)
-    pprint( bot.getMe() )
+    pprint(bot.getMe())
 
-    bot.message_loop(handle)
+    bot.message_loop(lambda msg: handle(msg, bookmarklist))
